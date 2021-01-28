@@ -1,1 +1,1 @@
-web: node flutter-wave/server.js
+web: node server.js

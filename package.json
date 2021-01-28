@@ -5,10 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node backend/server",
-    "server": "nodemon backend/server",
-    "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "start": "node server",
+    "server": "nodemon server",
+    "data:import": "node seeder",
+    "data:destroy": "node seeder -d"
   },
   "keywords": [],
   "author": "Chukwuebuka Ibeh",
