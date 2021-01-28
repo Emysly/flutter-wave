@@ -1,1 +1,1 @@
-web: npm run server
+web: node flutter-wave/server.js
