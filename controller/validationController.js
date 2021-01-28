@@ -65,29 +65,45 @@ const validateData = asyncHandler(async (req, res) => {
     })
   }
 
-  if (rule.field && !data.missions) {
-    res.status(400).json({
-      message: `field ${rule.field} is missing from data.`,
-      status: 'error',
-      data: null,
-    })
-  }
-
-  if (typeof rule != 'object') {
-    console.log(req.headers['content-type'])
-    return res.status(400).json({
-      message: 'rule should be a|an object.',
-      status: 'error',
-      data: null,
-    })
-  }
-
-  if (typeof data != 'object') {
-    return res.status(400).json({
-      message: 'data should be a|an object.',
-      status: 'error',
-      data: null,
-    })
+  if (Array.isArray(data) || typeof data === 'string') {
+    if (data[rule.field] !== undefined) {
+      if (data[rule.field] !== rule.condition_value) {
+        res.status(400).json({
+          message: `field ${rule.field} failed validation.`,
+          status: 'error',
+          data: {
+            validation: {
+              error: true,
+              field: rule.field,
+              field_value: data[rule.field],
+              condition: rule.condition,
+              condition_value: rule.condition_value,
+            },
+          },
+        })
+      } else {
+        console.log(data[5])
+        res.status(200).json({
+          message: `field ${rule.field} successfully validated.`,
+          status: 'success',
+          data: {
+            validation: {
+              error: false,
+              field: rule.field,
+              field_value: data.missions,
+              condition: rule.condition,
+              condition_value: rule.condition_value,
+            },
+          },
+        })
+      }
+    } else {
+      res.status(400).json({
+        message: `field ${rule.field} is missing from data.`,
+        status: 'error',
+        data: null,
+      })
+    }
   }
 
   if (data.missions >= rule.condition_value) {
@@ -106,7 +122,7 @@ const validateData = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(400).json({
-      message: 'field missions failed validation.',
+      message: `field ${rule.field} failed validation.`,
       status: 'error',
       data: {
         validation: {
@@ -117,6 +133,15 @@ const validateData = asyncHandler(async (req, res) => {
           condition_value: rule.condition_value,
         },
       },
+    })
+  }
+
+  if (typeof rule != 'object') {
+    console.log(req.headers['content-type'])
+    return res.status(400).json({
+      message: 'rule should be a|an object.',
+      status: 'error',
+      data: null,
     })
   }
 })
