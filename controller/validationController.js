@@ -6,7 +6,7 @@ const getData = asyncHandler(async (req, res) => {
     status: 'success',
     data: {
       name: 'Chukwuebuka Ibeh',
-      github: '@emysly12',
+      github: '@emysly',
       email: 'ebukasly123@gmail.com',
       mobile: '07060694614',
       twitter: '@emysilva1234',
