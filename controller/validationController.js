@@ -1,6 +1,4 @@
-import asyncHandler from 'express-async-handler'
-
-const getData = asyncHandler(async (req, res) => {
+const getData = (res) => {
   res.json({
     message: 'My Rule-Validation API',
     status: 'success',
@@ -12,9 +10,9 @@ const getData = asyncHandler(async (req, res) => {
       twitter: '@emysilva1234',
     },
   })
-})
+}
 
-const validateData = asyncHandler(async (req, res) => {
+const validateData = (req, res) => {
   const { rule, data } = req.body
 
   if (req.headers['content-type'] !== 'application/json') {
@@ -41,28 +39,36 @@ const validateData = asyncHandler(async (req, res) => {
     })
   }
 
-  if (!rule.field) {
+  if (typeof rule !== 'object') {
     return res.status(400).json({
-      message: 'field field is missing from data.',
+      message: 'rule should be a|an object.',
       status: 'error',
       data: null,
     })
-  }
+  } else {
+    if (!rule.field) {
+      return res.status(400).json({
+        message: 'field field is missing from data.',
+        status: 'error',
+        data: null,
+      })
+    }
 
-  if (!rule.condition) {
-    return res.status(400).json({
-      message: 'field condition is missing from data.',
-      status: 'error',
-      data: null,
-    })
-  }
+    if (!rule.condition) {
+      return res.status(400).json({
+        message: 'field condition is missing from data.',
+        status: 'error',
+        data: null,
+      })
+    }
 
-  if (!rule.condition_value) {
-    return res.status(400).json({
-      message: 'field condition_value is missing from data.',
-      status: 'error',
-      data: null,
-    })
+    if (!rule.condition_value) {
+      return res.status(400).json({
+        message: 'field condition_value is missing from data.',
+        status: 'error',
+        data: null,
+      })
+    }
   }
 
   if (Array.isArray(data) || typeof data === 'string') {
@@ -135,15 +141,6 @@ const validateData = asyncHandler(async (req, res) => {
       },
     })
   }
-
-  if (typeof rule != 'object') {
-    console.log(req.headers['content-type'])
-    return res.status(400).json({
-      message: 'rule should be a|an object.',
-      status: 'error',
-      data: null,
-    })
-  }
-})
+}
 
 export { getData, validateData }
