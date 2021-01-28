@@ -1,4 +1,4 @@
-const getData = (res) => {
+const getData = (req, res) => {
   res.json({
     message: 'My Rule-Validation API',
     status: 'success',
